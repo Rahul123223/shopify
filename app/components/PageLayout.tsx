@@ -1,4 +1,4 @@
-import {Await, Link} from 'react-router';
+import {Await, Link, NavLink} from 'react-router';
 import {Suspense, useId} from 'react';
 import type {
   CartApiQueryFragment,
@@ -37,21 +37,52 @@ export function PageLayout({
       <CartAside cart={cart} />
       <SearchAside />
       <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} />
-      {header && (
-        <Header
-          header={header}
-          cart={cart}
-          isLoggedIn={isLoggedIn}
-          publicStoreDomain={publicStoreDomain}
-        />
-      )}
-      <main>{children}</main>
-      <Footer
-        footer={footer}
-        header={header}
-        publicStoreDomain={publicStoreDomain}
-      />
+      <div className="site-layout">
+        <SiteNavigation />
+        <div className="site-content">
+          {header && (
+            <Header
+              header={header}
+              cart={cart}
+              isLoggedIn={isLoggedIn}
+              publicStoreDomain={publicStoreDomain}
+            />
+          )}
+          <main>{children}</main>
+          <Footer
+            footer={footer}
+            header={header}
+            publicStoreDomain={publicStoreDomain}
+          />
+        </div>
+      </div>
     </Aside.Provider>
+  );
+}
+
+function SiteNavigation() {
+  return (
+    <aside className="site-navigation-panel" aria-label="Main navigation">
+      <Link className="site-navigation-brand" to="/" aria-label="Serein Studio home">
+        <span className="site-navigation-brand-mark" aria-hidden="true">S</span>
+        <span><strong>Serein Studio</strong><small>Store workspace</small></span>
+      </Link>
+      <p className="site-navigation-label">Workspace</p>
+      <nav className="site-navigation-links" aria-label="Workspace">
+        <NavLink to="/" end className={({isActive}) => `site-navigation-link${isActive ? ' is-active' : ''}`}>
+          <span className="site-navigation-icon" aria-hidden="true">⌂</span>
+          <span>Home</span>
+        </NavLink>
+        <NavLink to="/draft-orders" className={({isActive}) => `site-navigation-link${isActive ? ' is-active' : ''}`}>
+          <span className="site-navigation-icon" aria-hidden="true">▤</span>
+          <span>Draft orders</span>
+        </NavLink>
+      </nav>
+      <div className="site-navigation-footer">
+        <span className="site-navigation-status-dot" />
+        <span>Demo workspace</span>
+      </div>
+    </aside>
   );
 }
 
