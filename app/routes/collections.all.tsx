@@ -29,13 +29,13 @@ async function loadCriticalData({context, request}: Route.LoaderArgs) {
     pageBy: 8,
   });
 
-  const [{products}] = await Promise.all([
+  const [{collection}] = await Promise.all([
     storefront.query(CATALOG_QUERY, {
       variables: {...paginationVariables},
     }),
     // Add other queries here, so that they are loaded in parallel
   ]);
-  return {products};
+  return {products: collection?.products};
 }
 
 /**
@@ -106,7 +106,8 @@ const CATALOG_QUERY = `#graphql
     $startCursor: String
     $endCursor: String
   ) @inContext(country: $country, language: $language) {
-    products(first: $first, last: $last, before: $startCursor, after: $endCursor) {
+    collection(handle: "all") {
+      products(first: $first, last: $last, before: $startCursor, after: $endCursor) {
       nodes {
         ...CollectionItem
       }
@@ -115,6 +116,7 @@ const CATALOG_QUERY = `#graphql
         hasNextPage
         startCursor
         endCursor
+      }
       }
     }
   }

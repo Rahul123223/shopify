@@ -23,11 +23,11 @@ export function Header({
   cart,
   publicStoreDomain,
 }: HeaderProps) {
-  const {shop, menu} = header;
+  const {menu} = header;
   return (
     <header className="header">
       <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
-        <strong>{shop.name}</strong>
+        <strong className="store-wordmark">Serein<span>Studio</span></strong>
       </NavLink>
       <HeaderMenu
         menu={menu}
